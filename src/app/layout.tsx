@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Poppins, Inter, Playfair_Display } from "next/font/google";
+import { Poppins, Inter, Playfair_Display, Bodoni_Moda } from "next/font/google";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -13,6 +13,13 @@ const playfair = Playfair_Display({
   variable: "--font-playfair",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
+});
+
+const bodoni = Bodoni_Moda({
+  variable: "--font-bodoni-moda",
+  subsets: ["latin"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 
@@ -43,7 +50,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${poppins.variable} ${playfair.variable} ${inter.variable}`}>
+    <html lang="en" className={`${poppins.variable} ${playfair.variable} ${inter.variable} ${bodoni.variable}`}>
       <body className="min-h-screen flex flex-col antialiased">
         {children}
       </body>

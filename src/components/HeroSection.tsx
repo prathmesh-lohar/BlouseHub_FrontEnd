@@ -42,7 +42,7 @@ const heroBadges = [
 
 export default function HeroSection() {
   return (
-    <section className="relative overflow-hidden bg-[#FFF2F6] min-h-[460px] lg:min-h-[500px]">
+    <section className="relative overflow-visible bg-[#FFF2F6] min-h-[280px] sm:min-h-[300px] lg:min-h-[330px]">
       {/* Absolute background graphics */}
       {/* Left Floral Line Drawing Sketch */}
       <div className="absolute left-0 top-0 bottom-0 w-1/3 pointer-events-none select-none opacity-80 mix-blend-multiply hidden md:block">
@@ -80,24 +80,26 @@ export default function HeroSection() {
         </svg>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-8 items-center pt-8 lg:pt-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-32 relative z-10">
+        <div className="grid lg:grid-cols-2 gap-8 items-center pt-6 sm:pt-8 lg:pt-8">
           {/* Left content */}
           <div className="animate-fade-in-up">
             <p className="font-sans text-[11px] font-bold tracking-[0.25em] text-[#4A4A4A] uppercase mb-4">
               CUSTOM BLOUSE DESIGNS
             </p>
-            <h1 className="font-sans font-bold text-4xl sm:text-5xl lg:text-[56px] text-text-dark leading-[1.1] mb-5">
+            <h1 className="font-serif font-normal text-4xl sm:text-5xl lg:text-[56px] text-black leading-[1.1] mb-5">
               Made for You.
               <br />
-              <span className="text-primary font-sans font-bold">Perfectly Yours.</span>
+              <span className="font-bodoni  text-primary">Perfectly Yours.</span>
             </h1>
 
             {/* Heart Divider Line */}
             <div className="flex items-center gap-3 my-5">
-              <div className="h-[1px] w-24 bg-[#E8CFDC]" />
-              <span className="text-[#C2185B] text-xs">♥</span>
-              <div className="h-[1px] w-24 bg-[#E8CFDC]" />
+              <div className="h-[1px] w-28 bg-[#C5A25D]" />
+              <svg className="w-3.5 h-3.5 fill-[#C5A25D]" viewBox="0 0 24 24">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+              </svg>
+              <div className="h-[1px] w-28 bg-[#C5A25D]" />
             </div>
 
             <p className="font-sans text-sm sm:text-base text-[#4A4A4A] leading-relaxed mb-8 max-w-sm">
@@ -119,7 +121,7 @@ export default function HeroSection() {
             <img
               src="/images/hero-model.png"
               alt="Model showcasing back of a custom-designed pink embroidered blouse"
-              className="w-auto h-[400px] sm:h-[450px] lg:h-[480px] object-contain select-none pointer-events-none"
+              className="w-auto h-[430px] sm:h-[480px] lg:h-[520px] xl:h-[560px] object-contain select-none pointer-events-none"
             />
           </div>
         </div>
