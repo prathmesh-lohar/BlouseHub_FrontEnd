@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import SectionHeading from "@/components/ui/SectionHeading";
 import ProductCard from "@/components/ui/ProductCard";
 import Button from "@/components/ui/Button";
@@ -15,16 +16,27 @@ const tabs = [
 ];
 
 const products = [
-  { name: "Elegant V Neck", price: "From ₹1,699", color: "from-pink-200 to-pink-300" },
-  { name: "Royal Embroidery", price: "From ₹2,499", color: "from-rose-200 to-rose-300" },
-  { name: "Back Dori Style", price: "From ₹1,799", color: "from-fuchsia-200 to-fuchsia-300" },
-  { name: "Puff Sleeve", price: "From ₹1,499", color: "from-pink-100 to-pink-200" },
-  { name: "Zari Work Blouse", price: "From ₹2,299", color: "from-amber-100 to-amber-200" },
-  { name: "Boat Neck Design", price: "From ₹1,899", color: "from-teal-100 to-teal-200" },
+  { name: "Elegant V Neck", price: "From ₹1,599", image: "/images/elegant_v_neck.png", tag: "New" },
+  { name: "Royal Embroidery", price: "From ₹2,499", image: "/images/royal_embroidery.png", tag: "Bridal" },
+  { name: "Back Dori Style", price: "From ₹1,799", image: "/images/back_dori_style.png", tag: "Trending" },
+  { name: "Puff Sleeve", price: "From ₹1,499", image: "/images/puff_sleeve.png", tag: "New" },
+  { name: "Zari Work Blouse", price: "From ₹2,299", image: "/images/zari_work_blouse.png", tag: "Bridal" },
+  { name: "Boat Neck Design", price: "From ₹1,699", image: "/images/boat_neck_design.png", tag: "Trending" },
 ];
 
 export default function DesignCatalog() {
   const [activeTab, setActiveTab] = useState("All Designs");
+
+  const filteredProducts = activeTab === "All Designs"
+    ? products
+    : products.filter(product => {
+        if (activeTab === "Neck Designs") return product.name.includes("V Neck") || product.name.includes("Boat Neck");
+        if (activeTab === "Sleeve Styles") return product.name.includes("Puff");
+        if (activeTab === "Back Designs") return product.name.includes("Back Dori");
+        if (activeTab === "Bridal") return product.tag === "Bridal";
+        if (activeTab === "Latest") return product.tag === "New" || product.tag === "Trending";
+        return true;
+      });
 
   return (
     <section className="py-16 lg:py-24 bg-white" id="designs">
@@ -53,30 +65,34 @@ export default function DesignCatalog() {
 
         {/* Product grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 lg:gap-5 mb-10 stagger-children">
-          {products.map((product, i) => (
-            <ProductCard
-              key={i}
-              name={product.name}
-              price={product.price}
-              image={
-                <div className={`w-full h-full bg-gradient-to-br ${product.color} flex items-center justify-center`}>
-                  <svg className="w-12 h-12 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                  </svg>
-                </div>
-              }
-            />
+          {filteredProducts.map((product, i) => (
+            <Link href="/products" key={i} className="block">
+              <ProductCard
+                name={product.name}
+                price={product.price}
+                tag={product.tag}
+                image={
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-full h-full object-cover"
+                  />
+                }
+              />
+            </Link>
           ))}
         </div>
 
         {/* CTA */}
         <div className="text-center">
-          <Button variant="outline" size="md">
-            View All 200+ Designs
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-            </svg>
-          </Button>
+          <Link href="/catelog" passHref legacyBehavior>
+            <Button variant="outline" size="md">
+              View All 200+ Designs
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+              </svg>
+            </Button>
+          </Link>
         </div>
       </div>
     </section>
