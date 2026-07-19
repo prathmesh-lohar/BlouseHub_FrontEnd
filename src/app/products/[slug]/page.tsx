@@ -6,8 +6,6 @@ import TopBanner from "@/components/TopBanner";
 import { useState } from "react";
 
 export default function ExactBridalBlouseProductPage() {
-  const [activeTab, setActiveTab] = useState("details");
-  
   const images = [
     "/images/bridal_blouse_pink.png",
     "/images/designer_blouse_white.png",
@@ -17,6 +15,9 @@ export default function ExactBridalBlouseProductPage() {
   ];
   
   const [selectedImg, setSelectedImg] = useState(images[0]);
+  const [activeTab, setActiveTab] = useState("about"); // about, details, reviews, size
+  const [measurementTab, setMeasurementTab] = useState("ai"); // ai, manual
+  const [selectedLocation, setSelectedLocation] = useState("Hyderabad");
 
   // Image zoom state tracking
   const [zoomPos, setZoomPos] = useState({ x: 0, y: 0 });
@@ -29,7 +30,29 @@ export default function ExactBridalBlouseProductPage() {
     setZoomPos({ x, y });
   };
 
-  // Exact measurement configuration matching the screenshot
+  const handlePrevImage = () => {
+    const idx = images.indexOf(selectedImg);
+    const prevIdx = (idx - 1 + images.length) % images.length;
+    setSelectedImg(images[prevIdx]);
+  };
+
+  const handleNextImage = () => {
+    const idx = images.indexOf(selectedImg);
+    const nextIdx = (idx + 1) % images.length;
+    setSelectedImg(images[nextIdx]);
+  };
+
+  // Interactive measurements state
+  const [measurements, setMeasurements] = useState({
+    "Bust Size": "34",
+    "Waist Size": "28",
+    "Shoulder Width": "14",
+    "Blouse Length": "14",
+    "Sleeve Style": "Short Sleeves",
+    "Sleeve Length": "10",
+  });
+
+  // Dropdown sizing configurations matching the screenshot
   const sizingOptions = [
     { label: "Bust Size", value: "34", unit: "inches", hasInnerCaret: true },
     { label: "Waist Size", value: "28", unit: "inches", hasInnerCaret: true },
@@ -39,7 +62,16 @@ export default function ExactBridalBlouseProductPage() {
     { label: "Sleeve Length", value: "10", unit: "inches", hasInnerCaret: true },
   ];
 
-  // Exact data extracted from the "Customer Also Viewed" screenshot
+  const dropdownOptions = {
+    "Bust Size": ["30", "32", "34", "36", "38", "40", "42"],
+    "Waist Size": ["24", "26", "28", "30", "32", "34", "36"],
+    "Shoulder Width": ["12", "13", "14", "15", "16"],
+    "Blouse Length": ["12", "13", "14", "15", "16"],
+    "Sleeve Style": ["Short Sleeves", "Elbow Length", "3/4 Sleeves", "Full Sleeves", "Sleeveless"],
+    "Sleeve Length": ["4", "5", "6", "7", "8", "9", "10", "11", "12"],
+  };
+
+  // Related products
   const relatedProducts = [
     { title: "Bridal Back Design", price: "₹1,099", rating: "4.9", count: "356", img: "/images/designer_blouse_white.png" },
     { title: "Popular Bridal Blouse", price: "₹1,299", rating: "4.8", count: "377", img: "/images/trendy_blouse_blue.png" },
@@ -52,401 +84,663 @@ export default function ExactBridalBlouseProductPage() {
     <>
       <TopBanner />
       <Header />
-      <main className="min-h-screen bg-[#FCF8FA] text-[#333333] antialiased p-4 md:p-8 font-sans">
-      <div className="max-w-7xl mx-auto">
-        
-        {/* BREADCRUMB NAVIGATION */}
-        <nav className="text-sm font-medium text-gray-400 mb-6 flex items-center gap-2">
-          <span className="text-[#C2376A] hover:underline cursor-pointer">Home</span>
-          <span>&gt;</span>
-          <span className="text-[#C2376A] hover:underline cursor-pointer">Bridal Blouses</span>
-          <span>&gt;</span>
-          <span className="text-gray-700 font-semibold">Bridal Blouse</span>
-        </nav>
-
-        {/* 3-COLUMN MASTER LAYOUT */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      <main className="min-h-screen bg-[#FFFDFE] text-[#2D2D2D] antialiased p-4 md:p-8 font-sans">
+        <div className="max-w-7xl mx-auto">
           
-          {/* =========================================================
-              COLUMN 1: LEFT GALLERY & DETAILS (~40% WIDTH)
-          ========================================================== */}
-          <div className="lg:col-span-5 space-y-4">
-            
-            {/* Main Product Image Container with cursor-tracking zoom lens */}
-            <div 
-              className="relative rounded-2xl overflow-hidden bg-white border border-[#EFE5EA] shadow-sm aspect-[4/4.8] cursor-zoom-in"
-              onMouseEnter={() => setIsZoomed(true)}
-              onMouseMove={handleMouseMove}
-              onMouseLeave={() => setIsZoomed(false)}
-            >
-              <img 
-                src={selectedImg} 
-                alt="Bridal Blouse Back Design" 
-                className="w-full h-full object-cover transition-transform duration-75"
-                style={{
-                  transform: isZoomed ? "scale(2)" : "scale(1)",
-                  transformOrigin: `${zoomPos.x}% ${zoomPos.y}%`
-                }}
-              />
-              {/* Heart Wishlist Button */}
-              <button className="absolute top-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md text-[#D64578] hover:scale-105 transition">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                  <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
-                </svg>
-              </button>
-            </div>
+          {/* BREADCRUMB NAVIGATION */}
+          <nav className="text-xs font-semibold tracking-wide text-gray-500 mb-6 flex items-center gap-2">
+            <span className="text-[#9C003C] hover:underline cursor-pointer">Home</span>
+            <span className="text-gray-400 font-normal">&gt;</span>
+            <span className="text-[#9C003C] hover:underline cursor-pointer">Bridal Blouses</span>
+            <span className="text-gray-400 font-normal">&gt;</span>
+            <span className="text-gray-800 font-bold">Bridal Blouse</span>
+          </nav>
 
-            {/* 5 Thumbnails Grid */}
-            <div className="grid grid-cols-5 gap-2.5">
-              {images.map((img, idx) => (
+          {/* 3-COLUMN MASTER LAYOUT */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            {/* =========================================================
+                COLUMN 1: LEFT GALLERY & DETAILS (~42% WIDTH)
+            ========================================================== */}
+            <div className="lg:col-span-5 space-y-6">
+              
+              {/* Main Product Image Container */}
+              <div className="relative rounded-2xl overflow-hidden bg-white border border-[#EFE5EA] shadow-xs aspect-[4/4.8]">
+                
+                {/* Image zoom wrapper */}
                 <div 
-                  key={idx} 
-                  onClick={() => setSelectedImg(img)}
-                  className={`aspect-square rounded-xl overflow-hidden bg-white cursor-pointer transition ${
-                    selectedImg === img ? "border-2 border-[#D64578] shadow-2xs" : "border border-gray-200 opacity-80 hover:opacity-100"
-                  }`}
+                  className="w-full h-full overflow-hidden cursor-zoom-in relative"
+                  onMouseEnter={() => setIsZoomed(true)}
+                  onMouseMove={handleMouseMove}
+                  onMouseLeave={() => setIsZoomed(false)}
                 >
                   <img 
-                    src={img} 
-                    alt={`Thumbnail ${idx + 1}`} 
-                    className="w-full h-full object-cover"
+                    src={selectedImg} 
+                    alt="Bridal Blouse Pink design" 
+                    className="w-full h-full object-cover transition-transform duration-75"
+                    style={{
+                      transform: isZoomed ? "scale(2.2)" : "scale(1)",
+                      transformOrigin: `${zoomPos.x}% ${zoomPos.y}%`
+                    }}
                   />
                 </div>
-              ))}
-            </div>
 
-            {/* Pill-Style Tabs (Not Underlined) */}
-            <div className="pt-2 flex items-center gap-3">
-              <button 
-                onClick={() => setActiveTab("details")}
-                className={`px-4 py-2 rounded-xl text-sm font-bold transition border ${
-                  activeTab === "details" 
-                    ? "bg-white border-gray-200 text-gray-800 shadow-2xs" 
-                    : "border-transparent text-gray-400 hover:text-gray-600"
-                }`}
-              >
-                Blouse Details
-              </button>
-              <button 
-                onClick={() => setActiveTab("reviews")}
-                className={`px-4 py-2 rounded-xl text-sm font-bold transition border ${
-                  activeTab === "reviews" 
-                    ? "bg-[#FDF2F7] border-[#FBCFE0] text-[#C2376A]" 
-                    : "border-transparent text-gray-400 hover:text-gray-600"
-                }`}
-              >
-                Customer Reviews
-              </button>
-            </div>
-
-            {/* Product Description */}
-            <div className="text-[15px] text-gray-600 leading-relaxed pt-1">
-              {activeTab === "details" ? (
-                <p>
-                  Exquisite maroon bridal blouse embellished with rich gold embroidery, sequins and beads for your special day. Back tie up with gold tassels and elegant sleeves. <span className="text-[#D64578]">♥</span>
-                </p>
-              ) : (
-                <p className="text-gray-400 italic">No reviews posted yet for this selection.</p>
-              )}
-            </div>
-
-            {/* Size Guide Outline Button */}
-            <div className="pt-1">
-              <button className="inline-flex items-center gap-1.5 bg-white border border-[#FBCFE0] hover:border-[#D64578] text-[#C2376A] px-3.5 py-1.5 rounded-lg text-sm font-semibold transition shadow-2xs">
-                <span>View Size Guide:</span>
-                <span className="text-base leading-none">&gt;</span>
-              </button>
-            </div>
-
-          </div>
-
-          {/* =========================================================
-              COLUMN 2: CENTER PRICING & SERVICE BADGES (~25% WIDTH)
-          ========================================================== */}
-          <div className="lg:col-span-3 space-y-4">
-            
-            {/* Title & Reviews */}
-            <div>
-              <h1 className="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">Bridal Blouse</h1>
-              <div className="flex items-center gap-1 mt-1.5 text-sm">
-                <div className="flex text-amber-400 tracking-tighter">★★★★★</div>
-                <span className="font-bold text-gray-800 ml-1">4.8</span>
-                <span className="text-gray-400 font-medium">(321 Reviews)</span>
-              </div>
-            </div>
-
-            {/* Price */}
-            <div className="text-3xl md:text-4xl font-black text-gray-900 pt-1">₹1,199</div>
-
-            {/* Book Stitching Action CTA */}
-            {/* <button className="w-full bg-[#D64578] hover:bg-[#c23b6c] text-white py-3 rounded-xl font-bold text-base shadow-sm transition">
-              Book Stitching
-            </button> */}
-
-            {/* Delivery & Service Split Box */}
-            <div className="bg-white border border-[#EFE5EA] rounded-2xl p-4 space-y-3 shadow-2xs text-sm">
-              <div className="flex items-start gap-3">
-                <span className="text-[#D64578] mt-0.5 text-lg">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                    <path d="M3.375 4.5C2.339 4.5 1.5 5.34 1.5 6.375V13.5h12V6.375c0-1.036-.84-1.875-1.875-1.875h-8.25zM13.5 15h-12v2.625c0 1.035.84 1.875 1.875 1.875h.375a3.75 3.75 0 007.5 0h.375a3.75 3.75 0 003.75-3.75V15z" />
-                    <path d="M15 6.75a.75.75 0 01.75-.75h2.25a.75.75 0 01.53.22l2.72 2.72a.75.75 0 01.22.53v4.29a.75.75 0 01-.75.75H15V6.75z" />
-                  </svg>
-                </span>
-                <div>
-                  <h4 className="font-bold text-gray-700">Free pickup &amp; delivery</h4>
-                  <p className="text-gray-400 text-xs mt-0.5">in 7–10 days</p>
+                {/* Bestseller Badge */}
+                <div className="absolute top-4 left-4 bg-[#9E0D49] text-white text-xs font-bold px-3 py-1.5 rounded-md shadow-xs">
+                  Bestseller
                 </div>
-              </div>
-              
-              <div className="w-full border-t border-dashed border-gray-200"></div>
 
-              <div className="flex items-start gap-3">
-                <span className="text-gray-400 mt-0.5 text-lg">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                    <path fillRule="evenodd" d="M11.54 22.351l.07.04.028.016a.76.76 0 00.723 0l.028-.015.071-.041a16.975 16.975 0 001.144-.742 19.58 19.58 0 002.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 00-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 002.682 2.282 16.975 16.975 0 001.145.742zM12 13.5a3.5 3.5 0 100-7 3.5 3.5 0 000 7z" clipRule="evenodd" />
+                {/* Wishlist Button */}
+                <button className="absolute top-4 right-4 w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-md text-gray-500 hover:text-[#9E0D49] hover:scale-105 transition-all">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-5 h-5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
                   </svg>
-                </span>
-                <div>
-                  <h4 className="font-bold text-gray-700">Services available in</h4>
-                  <p className="text-[#D64578] font-bold text-xs mt-0.5">Hyderabad</p>
-                </div>
-              </div>
-            </div>
+                </button>
 
-            {/* 10% OFF Yellow Saffron Plate */}
-            <div className="bg-[#FFF6E9] border border-[#FDE5C8] rounded-xl p-3 flex items-center justify-between text-sm">
-              <div className="font-bold text-[#D35B13] flex items-center gap-1.5">
-                <span>👑</span> 10% OFF
-              </div>
-              <div className="text-xs text-[#A6704E] font-medium text-right leading-tight">
-                <p>USE 30</p>
-                <p>on Your 1st Order</p>
-              </div>
-            </div>
-
-            {/* Divided Guarantees Checklist Card */}
-            <div className="bg-white border border-[#EFE5EA] rounded-2xl divide-y divide-gray-100 overflow-hidden shadow-2xs text-sm text-gray-600">
-              <div className="p-3.5 flex items-center gap-3">
-                <span className="text-gray-400">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.8" stroke="currentColor" className="w-5 h-5">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
-                  </svg>
-                </span>
-                <div>
-                  <span className="font-semibold text-gray-800">Pan India delivery:</span>{" "}
-                  <span className="text-gray-400">Free home measurements</span>
-                </div>
-              </div>
-
-              <div className="p-3.5 flex items-center gap-3">
-                <span className="text-[#D64578]">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                    <path d="M7.5 3.375c0-1.036.84-1.875 1.875-1.875h.375a3.75 3.75 0 013.75 3.75v1.875C13.5 8.161 14.34 9 15.375 9h1.875A3.75 3.75 0 0121 12.75v3.375C21 17.16 20.16 18 19.125 18h-9.75A1.875 1.875 0 017.5 16.125V3.375z" />
-                    <path d="M15 5.25a5.23 5.23 0 00-1.279-3.434 9.768 9.768 0 016.963 6.963A5.23 5.23 0 0017.25 7.5h-1.875A.375.375 0 0115 7.125V5.25zM4.875 6H6v10.125A3.375 3.375 0 009.375 19.5H16.5v1.125c0 1.035-.84 1.875-1.875 1.875h-9.75A3.75 3.75 0 011.125 18.75V9.75C1.125 7.679 2.804 6 4.875 6z" />
-                  </svg>
-                </span>
-                <div>
-                  <span className="font-semibold text-gray-800">7,000+ Top Rated</span>{" "}
-                  <span className="text-gray-400">Tailors</span>
-                </div>
-              </div>
-
-              <div className="p-3.5 flex items-center gap-3">
-                <span className="text-[#D64578]">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                    <path d="M12 7.5a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z" />
-                    <path fillRule="evenodd" d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.84 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 011.5 14.625v-9.75zM8.25 9.75a3.75 3.75 0 117.5 0 3.75 3.75 0 01-7.5 0zM18.75 9a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 00.75-.75V9.75a.75.75 0 00-.75-.75h-.008zM4.5 9.75A.75.75 0 015.25 9h.008a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75H5.25a.75.75 0 01-.75-.75V9.75z" clipRule="evenodd" />
-                    <path d="M2.25 18a.75.75 0 000 1.5c5.4 0 10.63.722 15.6 2.075 1.19.324 2.4-.558 2.4-1.82V18.75a.75.75 0 00-.75-.75H2.25z" />
-                  </svg>
-                </span>
-                <div>
-                  <span className="font-semibold text-gray-800">Free Pickup &amp; Delivery</span>{" "}
-                  <span className="text-gray-400">100% Perfect Fit Guarantee</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Bottom Gray Disclaimers with Micro Icons */}
-            <div className="space-y-1.5 text-xs text-gray-400 font-medium pt-1 pl-1">
-              <div className="flex items-center gap-2">
-                <span className="w-3 text-center">🔔</span>
-                <span>Read fabric instructions before washing.</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="w-3 text-center">⏱️</span>
-                <span>100% exact design fitting guarantee.</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="w-3 text-center">🧵</span>
-                <span>Verified tailor stitching services.</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="w-3 text-center">✂️</span>
-                <span>Expert and premium tailoring quality.</span>
-              </div>
-            </div>
-
-          </div>
-
-          {/* =========================================================
-              COLUMN 3: RIGHT SIDEBAR CUSTOM CONFIGURATION (~35% WIDTH)
-          ========================================================== */}
-          <div className="lg:col-span-3 bg-white border border-[#E8DCE1] rounded-[1rem] p-5 md:p-6 shadow-sm lg:sticky lg:top-6">
-            <h2 className="text-lg font-bold text-[#C2376A] mb-4 text-left">
-              Book Your Custom Stitching
-            </h2>
-
-            {/* Standalone City Dropdown (Top) */}
-            <div className="mb-4">
-              <div className="relative">
-                <select className="w-full bg-[#FCF8FA] border border-gray-200 rounded-xl px-3.5 py-3 text-sm font-bold text-gray-700 appearance-none focus:outline-none focus:border-[#D64578] cursor-pointer">
-                  <option>Hyderabad</option>
-                  <option>Bangalore</option>
-                  <option>Chennai</option>
-                </select>
-                <div className="absolute inset-y-0 right-3.5 flex items-center pointer-events-none text-gray-500">
+                {/* Left/Right Carousel Nav Arrows */}
+                <button 
+                  onClick={handlePrevImage}
+                  className="absolute top-1/2 left-3 -translate-y-1/2 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center shadow-md hover:bg-white text-gray-700 hover:scale-105 transition"
+                >
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor" className="w-4 h-4">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
                   </svg>
+                </button>
+                <button 
+                  onClick={handleNextImage}
+                  className="absolute top-1/2 right-3 -translate-y-1/2 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center shadow-md hover:bg-white text-gray-700 hover:scale-105 transition"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor" className="w-4 h-4">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                  </svg>
+                </button>
+
+                {/* View in 3D Button */}
+                <button className="absolute bottom-4 left-4 bg-white/95 text-gray-800 text-xs font-bold px-3.5 py-2 rounded-full shadow-md flex items-center gap-1.5 hover:bg-white transition-all">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-4 h-4 text-gray-700">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="m21 7.5-9-5.25L3 7.5m18 0-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25" />
+                  </svg>
+                  <span>View in 3D</span>
+                </button>
+
+              </div>
+
+              {/* 5 Thumbnails Grid */}
+              <div className="grid grid-cols-5 gap-2.5">
+                {images.map((img, idx) => (
+                  <div 
+                    key={idx} 
+                    onClick={() => setSelectedImg(img)}
+                    className={`aspect-[4/4.8] rounded-xl overflow-hidden bg-white cursor-pointer transition-all border-2 ${
+                      selectedImg === img ? "border-[#9E0D49] scale-[1.02] shadow-xs" : "border-[#EFE5EA] hover:border-gray-300 opacity-90 hover:opacity-100"
+                    }`}
+                  >
+                    <img 
+                      src={img} 
+                      alt={`Thumbnail ${idx + 1}`} 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ))}
+              </div>
+
+              {/* Underline Tabs Selector */}
+              <div className="pt-2">
+                <div className="flex items-center gap-6 border-b border-gray-200">
+                  {[
+                    { id: "about", label: "About This Blouse" },
+                    { id: "details", label: "Details & Fabric" },
+                    { id: "reviews", label: "Customer Reviews (321)" },
+                    { id: "size", label: "Size Guide" },
+                  ].map((tab) => (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveTab(tab.id)}
+                      className={`pb-2.5 text-[14px] font-bold transition-all relative ${
+                        activeTab === tab.id 
+                          ? "text-[#9E0D49]" 
+                          : "text-gray-400 hover:text-gray-600"
+                      }`}
+                    >
+                      {tab.label}
+                      {activeTab === tab.id && (
+                        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#9E0D49]" />
+                      )}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Tab Contents */}
+                <div className="pt-4 text-[14px] text-gray-600 leading-relaxed min-h-[60px]">
+                  {activeTab === "about" && (
+                    <p>
+                      Exquisite maroon bridal blouse embellished with rich gold embroidery, sequins and beads for your special day. Back tie up with gold tassels and elegant sleeves.
+                    </p>
+                  )}
+                  {activeTab === "details" && (
+                    <p>
+                      Premium raw silk blend fabric featuring meticulous hand embroidery. Best paired with ethnic bridal sarees. Dry clean only.
+                    </p>
+                  )}
+                  {activeTab === "reviews" && (
+                    <div className="flex items-center gap-2">
+                      <div className="flex text-amber-400 text-sm">★★★★★</div>
+                      <span className="font-bold text-gray-800">4.8 out of 5</span>
+                      <span className="text-gray-400 font-medium">(321 verified buyer ratings)</span>
+                    </div>
+                  )}
+                  {activeTab === "size" && (
+                    <p>
+                      Check custom sizing options in the checkout column. Free sizing re-fitting is covered by our fit guarantee services.
+                    </p>
+                  )}
                 </div>
               </div>
+
+              {/* Horizontal features container with pink borders */}
+              <div className="border border-[#F5D6E2] bg-[#FFF8FA] rounded-2xl p-4 grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="flex flex-col items-center text-center space-y-1.5">
+                  <div className="w-9 h-9 rounded-full bg-white border border-[#F5D6E2] flex items-center justify-center text-[#9E114D]">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-5 h-5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9.53 16.122A3 3 0 0 0 11.75 18h.5a3 3 0 0 0 2.22-1.878M9.53 16.122a3 3 0 0 1-1.03-3.486l.78-2.6A3 3 0 0 1 12.16 8h1.68a3 3 0 0 1 2.88 2.036l.78 2.6a3 3 0 0 1-1.03 3.486M9.53 16.122a3 3 0 0 0 4.94 0" />
+                    </svg>
+                  </div>
+                  <span className="text-xs font-bold text-gray-800 leading-none">Premium Fabric</span>
+                  <span className="text-[10px] text-gray-500 font-medium">Silk Blend</span>
+                </div>
+
+                <div className="flex flex-col items-center text-center space-y-1.5 border-l border-pink-100/60 pl-2">
+                  <div className="w-9 h-9 rounded-full bg-white border border-[#F5D6E2] flex items-center justify-center text-[#9E114D]">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-5 h-5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                    </svg>
+                  </div>
+                  <span className="text-xs font-bold text-gray-800 leading-none">Hand Embroidered</span>
+                  <span className="text-[10px] text-gray-500 font-medium">With Love</span>
+                </div>
+
+                <div className="flex flex-col items-center text-center space-y-1.5 border-l border-pink-100/60 pl-2">
+                  <div className="w-9 h-9 rounded-full bg-white border border-[#F5D6E2] flex items-center justify-center text-[#9E114D]">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-5 h-5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12z" />
+                    </svg>
+                  </div>
+                  <span className="text-xs font-bold text-gray-800 leading-none">Perfect Fit</span>
+                  <span className="text-[10px] text-gray-500 font-medium">Tailored for you</span>
+                </div>
+
+                <div className="flex flex-col items-center text-center space-y-1.5 border-l border-pink-100/60 pl-2">
+                  <div className="w-9 h-9 rounded-full bg-white border border-[#F5D6E2] flex items-center justify-center text-[#9E114D]">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-5 h-5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.57-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
+                    </svg>
+                  </div>
+                  <span className="text-xs font-bold text-gray-800 leading-none">Quality Assured</span>
+                  <span className="text-[10px] text-gray-500 font-medium">100% Guarantee</span>
+                </div>
+              </div>
+
             </div>
 
-            {/* 6 Sizing Dropdown Inputs with Exact Visual Dual-Caret Representation */}
-            <div className="space-y-3.5">
-              {sizingOptions.map((item, idx) => (
-                <div key={idx} className="space-y-1 text-left">
-                  <label className="block text-[13px] font-semibold text-gray-600">
-                    {item.label}
-                  </label>
+            {/* =========================================================
+                COLUMN 2: CENTER PRICING & SERVICE DETAILS (~27% WIDTH)
+            ========================================================== */}
+            <div className="lg:col-span-3 space-y-5">
+              
+              {/* Premium Collection Pill */}
+              <div className="bg-[#FFF0F4] text-[#9E0D49] border border-[#FBCFE0] text-[11px] font-bold px-3 py-1 rounded-full w-fit tracking-wide uppercase">
+                Premium Collection
+              </div>
+
+              {/* Title & Reviews */}
+              <div>
+                <h1 className="text-4xl font-bold font-serif text-gray-900 tracking-tight leading-tight">
+                  Bridal Blouse
+                </h1>
+                <div className="flex items-center gap-1.5 mt-2 text-sm">
+                  <div className="flex text-[#F59E0B] tracking-tighter">
+                    ★★★★★
+                  </div>
+                  <span className="font-bold text-gray-800 ml-1">4.8</span>
+                  <span className="text-gray-400 font-semibold">(321 Reviews)</span>
+                </div>
+              </div>
+
+              {/* Pricing Tags */}
+              <div className="flex items-baseline gap-3 pt-1">
+                <span className="text-4xl font-extrabold text-[#9C003C] tracking-tight">
+                  ₹1,199
+                </span>
+                <span className="text-lg text-gray-400 line-through font-semibold">
+                  ₹1,499
+                </span>
+                <span className="bg-[#FFF0F4] text-[#9E0D49] border border-[#FBCFE0] text-xs font-bold px-2 py-0.5 rounded">
+                  20% OFF
+                </span>
+              </div>
+
+              {/* Safe & Secure Payment green pill */}
+              <div className="bg-[#EBF7F2] text-[#107C41] border border-[#C6ECD9] text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 w-fit">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor" className="w-4 h-4">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12z" />
+                </svg>
+                <span>Safe & Secure Payments</span>
+                <span className="text-emerald-300">•</span>
+                <span>Easy Returns</span>
+              </div>
+
+              {/* Delivery info box */}
+              <div className="bg-white border border-[#F0E4EC] rounded-2xl p-4 divide-y divide-[#F0E4EC]/60 shadow-2xs text-sm">
+                <div className="pb-3 flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-[#FFF0F4] flex items-center justify-center text-[#9E0D49] shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-5 h-5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 18.75a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0ZM19.5 18.75a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m-7.487-1.875a6.705 6.705 0 0 1 9.475 0M3 16.5h15.75m-1.5-12h-8.25a.75.75 0 0 0-.75.75v10.5h9.75V5.25a.75.75 0 0 0-.75-.75Z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-gray-800">Free pickup & delivery</h4>
+                    <p className="text-gray-400 text-xs font-semibold mt-0.5">in 7–10 days</p>
+                  </div>
+                </div>
+
+                <div className="pt-3 flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500 shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-5 h-5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-gray-800">Services available in</h4>
+                    <p className="text-[#9E0D49] font-bold text-xs mt-0.5">Hyderabad</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Coupon card */}
+              <div className="bg-[#FFF7F3] border border-dashed border-[#FCDDCC] rounded-xl p-3.5 flex items-center justify-between text-sm">
+                <div className="font-bold text-[#D35B13] flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.2" stroke="currentColor" className="w-5 h-5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 11.25v8.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 1 0 9.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1 1 14.625 7.5H12m0 0V21m-8.625-9.75h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+                  </svg>
+                  <span>10% OFF</span>
+                </div>
+                <div className="text-right">
+                  <div className="border border-dashed border-[#F5C2A9] bg-[#FFF0E8] text-[#D35B13] font-extrabold px-2.5 py-0.5 rounded text-[11px] uppercase tracking-wide inline-block">
+                    USE CODE: WEDDING10
+                  </div>
+                  <p className="text-[10px] text-[#A6704E] font-bold mt-1">on your 1st order</p>
+                </div>
+              </div>
+
+              {/* Guarantees checklist card */}
+              <div className="bg-white border border-[#F0E4EC] rounded-2xl divide-y divide-gray-100 overflow-hidden shadow-2xs text-sm">
+                <div className="p-3.5 flex items-center gap-3">
+                  <span className="text-gray-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-5 h-5 text-gray-400">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12z" />
+                    </svg>
+                  </span>
+                  <div>
+                    <span className="font-bold text-gray-700">Pan India Delivery</span>
+                    <span className="text-gray-400 font-semibold block text-xs">Free home measurements</span>
+                  </div>
+                </div>
+
+                <div className="p-3.5 flex items-center gap-3">
+                  <span className="text-[#9E0D49]">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-5 h-5 text-[#9E0D49]">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 6a3 3 0 1 1-6 0c0-1.657 2.686-3 6-3s6 1.343 6 3a3 3 0 0 1-6 0zm-8.22 8.44a9 9 0 0 0 16.44 0l-8.22-3-8.22 3z" />
+                    </svg>
+                  </span>
+                  <div>
+                    <span className="font-bold text-gray-700">7,000+ Top Rated</span>
+                    <span className="text-gray-400 font-semibold block text-xs">Tailors</span>
+                  </div>
+                </div>
+
+                <div className="p-3.5 flex items-center gap-3">
+                  <span className="text-[#9E0D49]">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-5 h-5 text-[#9E0D49]">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0z" />
+                    </svg>
+                  </span>
+                  <div>
+                    <span className="font-bold text-gray-700">Free Pickup & Delivery</span>
+                    <span className="text-gray-400 font-semibold block text-xs">100% Perfect Fit Guarantee</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Stacked list disclaimers */}
+              <div className="space-y-2 text-xs text-gray-500 font-semibold pl-1">
+                <div className="flex items-center gap-2">
+                  <span className="w-4 h-4 rounded-full bg-amber-50 border border-amber-200 flex items-center justify-center text-[10px]">🔔</span>
+                  <span>Read fabric instructions before washing.</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-4 h-4 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center text-[10px]">✓</span>
+                  <span>100% exact design fitting guarantee.</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-4 h-4 rounded-full bg-pink-50 border border-pink-200 flex items-center justify-center text-[10px]">🧵</span>
+                  <span>Verified tailor stitching services.</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-4 h-4 rounded-full bg-blue-50 border border-blue-200 flex items-center justify-center text-[10px]">🛡️</span>
+                  <span>Expert & premium tailoring quality.</span>
+                </div>
+              </div>
+
+              {/* Not sure about size card */}
+              <div className="bg-[#FFF6F9] border border-[#F7E1E8] rounded-2xl p-4 space-y-3.5">
+                <div className="flex items-start gap-3">
+                  <span className="text-[#9E0D49] mt-0.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.2" stroke="currentColor" className="w-5 h-5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 21l-.813-5.096L3.096 15 8.19 14.187 9 9l.813 5.187 5.096.813-5.096.904zM19.006 5.005l-.505 2.502-2.502.505 2.502.505.505 2.502.505-2.502 2.502-.505-2.502-.505-.505-2.502z" />
+                    </svg>
+                  </span>
+                  <div>
+                    <h4 className="font-bold text-gray-800 text-sm">Not sure about your size?</h4>
+                    <p className="text-gray-400 text-xs font-semibold mt-0.5">
+                      Try AI measurement for the perfect fit
+                    </p>
+                  </div>
+                </div>
+                <button 
+                  onClick={() => setMeasurementTab("ai")}
+                  className="w-full bg-[#9E0D49] hover:bg-[#8D0E44] text-white py-2.5 rounded-xl font-bold text-sm shadow-xs transition"
+                >
+                  Try AI Measurement
+                </button>
+              </div>
+
+            </div>
+
+            {/* =========================================================
+                COLUMN 3: RIGHT CUSTOM STITCHING SIDEBAR (~31% WIDTH)
+            ========================================================== */}
+            <div className="lg:col-span-4 bg-white border border-[#E8DCE1] rounded-[1.25rem] p-5 md:p-6 shadow-sm space-y-5 lg:sticky lg:top-6">
+              
+              {/* Header Title */}
+              <div className="flex items-center gap-2 border-b border-gray-100 pb-3">
+                <span className="text-[#9C003C]">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor" className="w-5 h-5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9.53 16.122A3 3 0 0 0 11.75 18h.5a3 3 0 0 0 2.22-1.878M9.53 16.122a3 3 0 0 1-1.03-3.486l.78-2.6A3 3 0 0 1 12.16 8h1.68a3 3 0 0 1 2.88 2.036l.78 2.6a3 3 0 0 1-1.03 3.486M9.53 16.122a3 3 0 0 0 4.94 0" />
+                  </svg>
+                </span>
+                <h2 className="text-[17px] font-bold text-[#9C003C] font-serif">
+                  Book Your Custom Stitching
+                </h2>
+              </div>
+
+              {/* Select Location Dropdown */}
+              <div className="space-y-1.5">
+                <label className="block text-[11px] font-bold tracking-wide uppercase text-gray-400">
+                  Select Location
+                </label>
+                <div className="relative">
+                  <select 
+                    value={selectedLocation}
+                    onChange={(e) => setSelectedLocation(e.target.value)}
+                    className="w-full bg-[#FCF8FA] border border-gray-200 rounded-xl px-4 py-3 text-sm font-bold text-gray-700 appearance-none focus:outline-none focus:border-[#9E0D49] cursor-pointer shadow-2xs"
+                  >
+                    <option value="Hyderabad">Hyderabad</option>
+                    <option value="Bangalore">Bangalore</option>
+                    <option value="Chennai">Chennai</option>
+                    <option value="Mumbai">Mumbai</option>
+                  </select>
+                  <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none text-gray-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor" className="w-4 h-4">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              {/* Your Measurements Tab Switcher */}
+              <div className="space-y-2">
+                <label className="block text-[13px] font-bold text-gray-700">
+                  Your Measurements
+                </label>
+                
+                <div className="flex border border-gray-200 rounded-xl p-0.5 bg-gray-50/50">
+                  <button
+                    onClick={() => setMeasurementTab("manual")}
+                    className={`w-1/2 py-2 px-3 text-xs font-bold rounded-lg transition-all ${
+                      measurementTab === "manual"
+                        ? "bg-white text-gray-800 shadow-xs border border-gray-200"
+                        : "text-gray-400 hover:text-gray-600"
+                    }`}
+                  >
+                    Manual Input
+                  </button>
+
+                  <button
+                    onClick={() => setMeasurementTab("ai")}
+                    className={`relative w-1/2 py-2 px-3 text-xs font-bold rounded-lg transition-all ${
+                      measurementTab === "ai"
+                        ? "bg-white text-[#9C003C] shadow-xs border border-[#FBCFE0]"
+                        : "text-gray-400 hover:text-gray-600"
+                    }`}
+                  >
+                    AI Measurement
+                    <span className="absolute -top-1.5 -right-1 bg-red-600 text-white text-[8px] font-extrabold px-1 py-0.5 rounded-full uppercase tracking-wider scale-90">
+                      New
+                    </span>
+                  </button>
+                </div>
+              </div>
+
+              {/* AI Body Measurement Detail Card */}
+              {measurementTab === "ai" && (
+                <div className="border border-[#F5D6E2] rounded-xl p-4 bg-[#FFF8FA]/40 space-y-4 animate-fade-in-up">
                   
-                  {/* Outer Wrapper Box */}
-                  <div className="relative w-full bg-white border border-gray-200 rounded-xl px-3.5 py-2.5 flex items-center justify-between shadow-2xs hover:border-gray-300 transition">
-                    
-                    {/* Left Content: Value + Unit + Inner Down Arrow */}
-                    <div className="flex items-center gap-1 text-sm pointer-events-none">
-                      <span className="font-bold text-gray-900">{item.value}</span>
-                      {item.unit && <span className="text-gray-500 font-normal">{item.unit}</span>}
-                      {item.hasInnerCaret && (
-                        <span className="text-gray-400 text-xs ml-0.5">
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="3" stroke="currentColor" className="w-3 h-3 inline">
+                  {/* Title Sparkles */}
+                  <div className="flex gap-2">
+                    <span className="text-[#9E0D49] mt-0.5 shrink-0">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.2" stroke="currentColor" className="w-5 h-5 text-[#9E0D49]">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 21l-.813-5.096L3.096 15 8.19 14.187 9 9l.813 5.187 5.096.813-5.096.904zM19.006 5.005l-.505 2.502-2.502.505 2.502.505.505 2.502.505-2.502 2.502-.505-2.502-.505-.505-2.502z" />
+                      </svg>
+                    </span>
+                    <div>
+                      <h4 className="font-extrabold text-[#9C003C] text-sm leading-tight">
+                        AI Body Measurement
+                      </h4>
+                      <p className="text-gray-400 text-[11px] font-semibold mt-0.5 leading-snug">
+                        Get accurate measurements using AI technology
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Bullet points checks */}
+                  <ul className="space-y-2 text-xs font-semibold text-gray-700">
+                    <li className="flex items-center gap-2">
+                      <span className="w-4 h-4 rounded-full bg-emerald-100 flex items-center justify-center text-[10px] text-emerald-700 font-extrabold">✓</span>
+                      <span>Just 2 photos required</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span className="w-4 h-4 rounded-full bg-emerald-100 flex items-center justify-center text-[10px] text-emerald-700 font-extrabold">✓</span>
+                      <span>AI measures 20+ points</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span className="w-4 h-4 rounded-full bg-emerald-100 flex items-center justify-center text-[10px] text-emerald-700 font-extrabold">✓</span>
+                      <span>95% accuracy guarantee</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span className="w-4 h-4 rounded-full bg-emerald-100 flex items-center justify-center text-[10px] text-emerald-700 font-extrabold">✓</span>
+                      <span>Total time: 2 minutes</span>
+                    </li>
+                  </ul>
+
+                  {/* CTA button inside */}
+                  <button className="w-full bg-[#9E0D49] hover:bg-[#8D0E44] text-white py-2.5 rounded-xl font-bold text-xs tracking-wide shadow-xs transition">
+                    Start AI Measurement
+                  </button>
+
+                  {/* Help link */}
+                  <div className="text-center pt-0.5">
+                    <a href="#how" className="inline-flex items-center gap-1 text-[11px] font-bold text-gray-500 hover:text-gray-700">
+                      <span>ℹ️</span>
+                      <span className="underline">How it works?</span>
+                    </a>
+                  </div>
+
+                </div>
+              )}
+
+              {/* Sizing dropdown selectors stacked */}
+              <div className="space-y-3.5">
+                {sizingOptions.map((item, idx) => {
+                  const currentValue = measurements[item.label as keyof typeof measurements] || item.value;
+                  return (
+                    <div key={idx} className="space-y-1 text-left">
+                      <label className="block text-[13px] font-bold text-gray-700">
+                        {item.label}
+                      </label>
+                      
+                      {/* Custom dropdown styling with double carets */}
+                      <div className="relative w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 flex items-center justify-between shadow-2xs hover:border-gray-300 transition">
+                        
+                        {/* Left Side: Value + Unit + Inner arrow */}
+                        <div className="flex items-center gap-1.5 text-sm pointer-events-none">
+                          <span className="font-extrabold text-gray-900">{currentValue}</span>
+                          {item.unit && (
+                            <span className="text-gray-400 font-bold text-xs">{item.unit}</span>
+                          )}
+                          {item.hasInnerCaret && (
+                            <span className="text-gray-400 mt-0.5">
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="3" stroke="currentColor" className="w-2.5 h-2.5">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                              </svg>
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Far-Right Side: Dropdown caret arrow */}
+                        <div className="text-gray-400 pointer-events-none">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor" className="w-4 h-4">
                             <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                           </svg>
-                        </span>
-                      )}
+                        </div>
+
+                        {/* Absolute hidden select wrapper to handle native browser functionality */}
+                        <select 
+                          value={currentValue}
+                          onChange={(e) => setMeasurements({ ...measurements, [item.label]: e.target.value })}
+                          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                        >
+                          {dropdownOptions[item.label as keyof typeof dropdownOptions].map((opt) => (
+                            <option key={opt} value={opt}>
+                              {opt} {item.unit}
+                            </option>
+                          ))}
+                        </select>
+
+                      </div>
                     </div>
+                  );
+                })}
+              </div>
 
-                    {/* Right Content: Far-Right Dropdown Arrow */}
-                    <div className="text-gray-400 pointer-events-none">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor" className="w-4 h-4">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                      </svg>
-                    </div>
+              {/* Proceed to Checkout CTA */}
+              <button className="w-full bg-[#9E0D49] hover:bg-[#8D0E44] text-white py-4 rounded-xl font-bold text-xs uppercase tracking-wider mt-6 shadow-sm hover:scale-[1.01] transition-all">
+                Proceed to Checkout
+              </button>
 
-                    {/* Functional Native Select Underneath */}
-                    <select className="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
-                      <option>{item.value} {item.unit}</option>
-                    </select>
-
-                  </div>
+              {/* Trust Badges bottom line */}
+              <div className="grid grid-cols-4 gap-1 mt-6 pt-4 border-t border-gray-100 text-[10px] text-gray-500 font-bold text-center leading-snug">
+                <div className="flex flex-col items-center gap-1 justify-between h-full">
+                  <span className="text-lg">🔒</span>
+                  <span>Secure Payment</span>
                 </div>
-              ))}
-            </div>
+                <div className="flex flex-col items-center gap-1 justify-between h-full border-l border-gray-100">
+                  <span className="text-lg">🔄</span>
+                  <span>Easy Returns</span>
+                </div>
+                <div className="flex flex-col items-center gap-1 justify-between h-full border-l border-gray-100">
+                  <span className="text-lg">🚚</span>
+                  <span>On-time Delivery</span>
+                </div>
+                <div className="flex flex-col items-center gap-1 justify-between h-full border-l border-gray-100">
+                  <span className="text-lg">🛡️</span>
+                  <span>Premium Quality</span>
+                </div>
+              </div>
 
-            {/* Proceed to Checkout Button */}
-            <button className="w-full bg-[#D64578] hover:bg-[#c23b6c] text-white py-3.5 rounded-xl font-bold text-sm uppercase tracking-wider mt-6 shadow-sm transition">
-              Proceed to Checkout
-            </button>
-
-            {/* Bottom 3 Icons Footer inside Card */}
-            <div className="grid grid-cols-3 gap-1 mt-6 pt-4 border-t border-gray-100 text-xs text-gray-500 font-medium text-center leading-tight">
-              <div className="flex flex-col items-center justify-center gap-1">
-                <span className="text-base">🚚</span>
-                <span>Delivery Services</span>
-              </div>
-              <div className="flex flex-col items-center justify-center gap-1">
-                <span className="text-base">🔄</span>
-                <span>Free Pickup &amp; Delivery</span>
-              </div>
-              <div className="flex flex-col items-center justify-center gap-1">
-                <span className="text-base">✨</span>
-                <span>Premium Fit Guarantee</span>
-              </div>
             </div>
 
           </div>
 
-        </div>
+          {/* =========================================================
+              BOTTOM RECOMMENDATIONS: CUSTOMER ALSO VIEWED
+          ========================================================== */}
+          <section className="mt-16 pt-8 border-t border-gray-200/60">
+            
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-bold text-[#9C003C] tracking-tight font-serif">
+                Customer Also Viewed
+              </h3>
+            </div>
 
-        {/* =========================================================
-            BOTTOM RECOMMENDATIONS: CUSTOMER ALSO VIEWED
-        ========================================================== */}
-        <section className="mt-16 pt-8 border-t border-gray-200/60">
-          
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-xl font-bold text-[#C2376A] tracking-tight">
-              Customer Also Viewed
-            </h3>
-          </div>
-
-          {/* Product Cards Grid matching screenshot */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-            {relatedProducts.map((item, idx) => (
-              <div 
-                key={idx} 
-                className="bg-white rounded-2xl border border-gray-200/80 p-2.5 shadow-2xs flex flex-col justify-between group transition hover:shadow-sm"
-              >
-                <div>
-                  {/* Card Image Container */}
-                  <div className="relative aspect-[4/3.8] bg-[#FDF8FA] rounded-xl overflow-hidden mb-3">
-                    <img 
-                      src={item.img} 
-                      alt={item.title} 
-                      className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
-                      onError={(e) => {
-                        (e.target as HTMLElement).style.backgroundColor = "#FCE8F0";
-                      }}
-                    />
-                    
-                    {/* Top-Right Heart Wishlist Button */}
-                    <button className="absolute top-2 right-2 w-7 h-7 bg-white/95 rounded-full flex items-center justify-center text-[#D64578] shadow-2xs hover:scale-110 transition">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
-                        <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
-                      </svg>
-                    </button>
-                  </div>
-
-                  {/* Product Meta Info */}
-                  <div className="px-1 space-y-1">
-                    <h4 className="text-sm font-bold text-gray-800 truncate">{item.title}</h4>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-black text-gray-900">{item.price}</span>
+            {/* Product Cards Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+              {relatedProducts.map((item, idx) => (
+                <div 
+                  key={idx} 
+                  className="bg-white rounded-2xl border border-gray-200/80 p-2.5 shadow-2xs flex flex-col justify-between group transition hover:shadow-xs hover:border-[#FBCFE0]"
+                >
+                  <div>
+                    {/* Card Image Container */}
+                    <div className="relative aspect-[4/4.5] bg-[#FDF8FA] rounded-xl overflow-hidden mb-3">
+                      <img 
+                        src={item.img} 
+                        alt={item.title} 
+                        className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                        onError={(e) => {
+                          (e.target as HTMLElement).style.backgroundColor = "#FCE8F0";
+                        }}
+                      />
                       
-                      {/* Rating with Star */}
-                      <div className="flex items-center gap-0.5 text-xs font-bold text-gray-500">
-                        <span className="text-[#F59E0B] text-sm">★</span>
-                        <span>{item.rating} <span className="font-normal text-gray-400">({item.count})</span></span>
+                      {/* Top-Right Heart Wishlist Button */}
+                      <button className="absolute top-2 right-2 w-7 h-7 bg-white/95 rounded-full flex items-center justify-center text-gray-400 hover:text-[#9E0D49] shadow-2xs hover:scale-110 transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-4 h-4">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                        </svg>
+                      </button>
+                    </div>
+
+                    {/* Product Meta Info */}
+                    <div className="px-1 space-y-1">
+                      <h4 className="text-sm font-bold text-gray-800 truncate">{item.title}</h4>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-extrabold text-[#9C003C]">{item.price}</span>
+                        
+                        {/* Rating with Star */}
+                        <div className="flex items-center gap-0.5 text-xs font-bold text-gray-500">
+                          <span className="text-[#F59E0B] text-sm">★</span>
+                          <span>{item.rating} <span className="font-normal text-gray-400">({item.count})</span></span>
+                        </div>
                       </div>
                     </div>
                   </div>
+
+                  {/* Bottom Card CTA */}
+                  <div className="px-1 mt-3">
+                    <button className="w-full bg-[#9E0D49] hover:bg-[#8D0E44] text-white text-xs font-bold py-2 rounded-xl shadow-2xs transition">
+                      Book Stitching
+                    </button>
+                  </div>
+
                 </div>
+              ))}
+            </div>
 
-                {/* Bottom Card CTA */}
-                <div className="px-1 mt-3">
-                  <button className="w-full bg-[#D64578] hover:bg-[#c23b6c] text-white text-sm font-bold py-2 rounded-xl shadow-2xs transition">
-                    Book Stitching
-                  </button>
-                </div>
+          </section>
 
-              </div>
-            ))}
-          </div>
-
-        </section>
-
-      </div>
-    </main>
-    <Footer />
+        </div>
+      </main>
+      <Footer />
     </>
   );
 }
