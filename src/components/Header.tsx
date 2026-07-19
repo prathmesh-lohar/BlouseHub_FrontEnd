@@ -14,6 +14,7 @@ const navLinks = [
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
 
   return (
     <header className="bg-[#FFF5F8] sticky top-0 z-50 shadow-sm border-b border-[#F0D5E2]">
@@ -106,13 +107,76 @@ export default function Header() {
             </button>
 
             {/* Profile Avatar */}
-            <button className="p-1 cursor-pointer">
-              <img
-                src="/images/avatar.png"
-                alt="Profile avatar"
-                className="w-8 h-8 rounded-full border border-[#E5D0DD] object-cover"
-              />
-            </button>
+            <div className="relative">
+              <button
+                className="p-1 cursor-pointer flex items-center justify-center rounded-full hover:bg-[#FFF2F6] transition-colors"
+                onClick={() => setProfileMenuOpen(!profileMenuOpen)}
+                aria-expanded={profileMenuOpen}
+                aria-haspopup="true"
+              >
+                <img
+                  src="/images/avatar.png"
+                  alt="Profile avatar"
+                  className="w-8 h-8 rounded-full border border-[#E5D0DD] object-cover"
+                />
+              </button>
+
+              {/* Profile Dropdown Menu */}
+              {profileMenuOpen && (
+                <>
+                  {/* Backdrop to close dropdown on click outside */}
+                  <div
+                    className="fixed inset-0 z-10 cursor-default"
+                    onClick={() => setProfileMenuOpen(false)}
+                  />
+                  <div className="absolute right-0 mt-2 w-48 bg-white border border-[#F0D5E2] rounded-xl shadow-xl py-2 z-20 animate-fade-in origin-top-right">
+                    <a
+                      href="/profile"
+                      className="flex items-center px-4 py-2.5 text-sm text-[#4A4A4A] hover:bg-[#FFF2F6] hover:text-primary transition-colors font-sans font-medium group"
+                      onClick={() => setProfileMenuOpen(false)}
+                    >
+                      <svg className="w-4 h-4 mr-2.5 text-[#7c7c7c] group-hover:text-primary transition-colors" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                      </svg>
+                      My Profile
+                    </a>
+                    <a
+                      href="/orders"
+                      className="flex items-center px-4 py-2.5 text-sm text-[#4A4A4A] hover:bg-[#FFF2F6] hover:text-primary transition-colors font-sans font-medium group"
+                      onClick={() => setProfileMenuOpen(false)}
+                    >
+                      <svg className="w-4 h-4 mr-2.5 text-[#7c7c7c] group-hover:text-primary transition-colors" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+                      </svg>
+                      My Orders
+                    </a>
+                    <a
+                      href="/measurements"
+                      className="flex items-center px-4 py-2.5 text-sm text-[#4A4A4A] hover:bg-[#FFF2F6] hover:text-primary transition-colors font-sans font-medium group"
+                      onClick={() => setProfileMenuOpen(false)}
+                    >
+                      <svg className="w-4 h-4 mr-2.5 text-[#7c7c7c] group-hover:text-primary transition-colors" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h10a2 2 0 012 2v14a2 2 0 01-2 2zM9 8h6" />
+                      </svg>
+                      My Measurements
+                    </a>
+                    <hr className="border-t border-[#F0D5E2] my-1" />
+                    <button
+                      onClick={() => {
+                        setProfileMenuOpen(false);
+                        alert("Logging out...");
+                      }}
+                      className="w-full text-left flex items-center px-4 py-2.5 text-sm text-red-500 hover:bg-[#FFF2F6] transition-colors font-sans font-semibold cursor-pointer group"
+                    >
+                      <svg className="w-4 h-4 mr-2.5 text-red-400 group-hover:text-red-500 transition-colors" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+                      </svg>
+                      Logout
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
 
             {/* Mobile menu toggle */}
             <button
