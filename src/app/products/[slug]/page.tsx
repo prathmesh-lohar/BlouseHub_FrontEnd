@@ -1,9 +1,33 @@
 "use client";
 
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
+import TopBanner from "@/components/TopBanner";
 import { useState } from "react";
 
 export default function ExactBridalBlouseProductPage() {
   const [activeTab, setActiveTab] = useState("details");
+  
+  const images = [
+    "/images/bridal_blouse_pink.png",
+    "/images/designer_blouse_white.png",
+    "/images/gold_embroidery_blouse.png",
+    "/images/trendy_blouse_blue.png",
+    "/images/designer_blouse_white.png",
+  ];
+  
+  const [selectedImg, setSelectedImg] = useState(images[0]);
+
+  // Image zoom state tracking
+  const [zoomPos, setZoomPos] = useState({ x: 0, y: 0 });
+  const [isZoomed, setIsZoomed] = useState(false);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - left) / width) * 100;
+    const y = ((e.clientY - top) / height) * 100;
+    setZoomPos({ x, y });
+  };
 
   // Exact measurement configuration matching the screenshot
   const sizingOptions = [
@@ -17,15 +41,18 @@ export default function ExactBridalBlouseProductPage() {
 
   // Exact data extracted from the "Customer Also Viewed" screenshot
   const relatedProducts = [
-    { title: "Bridal Back Design", price: "₹1,099", rating: "4.9", count: "356", img: "/images/products/related-1.jpg" },
-    { title: "Popular Bridal Blouse", price: "₹1,299", rating: "4.8", count: "377", img: "/images/products/related-2.jpg" },
-    { title: "Traditional Bridal", price: "₹1,199", rating: "4.8", count: "356", img: "/images/products/related-3.jpg" },
-    { title: "Maroon Bridal", price: "₹1,099", rating: "4.8", count: "277", img: "/images/products/related-4.jpg" },
-    { title: "Bridal Blouse", price: "₹1,099", rating: "4.4", count: "277", img: "/images/products/related-5.jpg" },
+    { title: "Bridal Back Design", price: "₹1,099", rating: "4.9", count: "356", img: "/images/designer_blouse_white.png" },
+    { title: "Popular Bridal Blouse", price: "₹1,299", rating: "4.8", count: "377", img: "/images/trendy_blouse_blue.png" },
+    { title: "Traditional Bridal", price: "₹1,199", rating: "4.8", count: "356", img: "/images/gold_embroidery_blouse.png" },
+    { title: "Maroon Bridal", price: "₹1,099", rating: "4.8", count: "277", img: "/images/bridal_blouse_pink.png" },
+    { title: "Bridal Blouse", price: "₹1,099", rating: "4.4", count: "277", img: "/images/designer_blouse_white.png" },
   ];
 
   return (
-    <main className="min-h-screen bg-[#FCF8FA] text-[#333333] antialiased p-4 md:p-8 font-sans">
+    <>
+      <TopBanner />
+      <Header />
+      <main className="min-h-screen bg-[#FCF8FA] text-[#333333] antialiased p-4 md:p-8 font-sans">
       <div className="max-w-7xl mx-auto">
         
         {/* BREADCRUMB NAVIGATION */}
@@ -45,14 +72,20 @@ export default function ExactBridalBlouseProductPage() {
           ========================================================== */}
           <div className="lg:col-span-5 space-y-4">
             
-            {/* Main Product Image Container */}
-            <div className="relative rounded-2xl overflow-hidden bg-white border border-[#EFE5EA] shadow-sm aspect-[4/4.8]">
+            {/* Main Product Image Container with cursor-tracking zoom lens */}
+            <div 
+              className="relative rounded-2xl overflow-hidden bg-white border border-[#EFE5EA] shadow-sm aspect-[4/4.8] cursor-zoom-in"
+              onMouseEnter={() => setIsZoomed(true)}
+              onMouseMove={handleMouseMove}
+              onMouseLeave={() => setIsZoomed(false)}
+            >
               <img 
-                src="/images/products/bridal-blouse-main.jpg" 
+                src={selectedImg} 
                 alt="Bridal Blouse Back Design" 
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  (e.target as HTMLElement).style.backgroundColor = "#FDF2F7";
+                className="w-full h-full object-cover transition-transform duration-75"
+                style={{
+                  transform: isZoomed ? "scale(2)" : "scale(1)",
+                  transformOrigin: `${zoomPos.x}% ${zoomPos.y}%`
                 }}
               />
               {/* Heart Wishlist Button */}
@@ -65,20 +98,18 @@ export default function ExactBridalBlouseProductPage() {
 
             {/* 5 Thumbnails Grid */}
             <div className="grid grid-cols-5 gap-2.5">
-              {[1, 2, 3, 4, 5].map((idx) => (
+              {images.map((img, idx) => (
                 <div 
                   key={idx} 
+                  onClick={() => setSelectedImg(img)}
                   className={`aspect-square rounded-xl overflow-hidden bg-white cursor-pointer transition ${
-                    idx === 1 ? "border-2 border-[#D64578] shadow-2xs" : "border border-gray-200 opacity-80 hover:opacity-100"
+                    selectedImg === img ? "border-2 border-[#D64578] shadow-2xs" : "border border-gray-200 opacity-80 hover:opacity-100"
                   }`}
                 >
                   <img 
-                    src={`/images/products/bridal-blouse-thumb-${idx}.jpg`} 
-                    alt={`Thumbnail ${idx}`} 
+                    src={img} 
+                    alt={`Thumbnail ${idx + 1}`} 
                     className="w-full h-full object-cover"
-                    onError={(e) => {
-                      (e.target as HTMLElement).style.backgroundColor = "#FCE8F0";
-                    }}
                   />
                 </div>
               ))}
@@ -202,8 +233,8 @@ export default function ExactBridalBlouseProductPage() {
                   </svg>
                 </span>
                 <div>
-                  <span className="font-semibold text-gray-800">Free deliveries:</span>{" "}
-                  <span className="text-gray-400">Mess in tydernant</span>
+                  <span className="font-semibold text-gray-800">Pan India delivery:</span>{" "}
+                  <span className="text-gray-400">Free home measurements</span>
                 </div>
               </div>
 
@@ -230,7 +261,7 @@ export default function ExactBridalBlouseProductPage() {
                 </span>
                 <div>
                   <span className="font-semibold text-gray-800">Free Pickup &amp; Delivery</span>{" "}
-                  <span className="text-gray-400">fit-70% alt Gurantes</span>
+                  <span className="text-gray-400">100% Perfect Fit Guarantee</span>
                 </div>
               </div>
             </div>
@@ -260,8 +291,7 @@ export default function ExactBridalBlouseProductPage() {
           {/* =========================================================
               COLUMN 3: RIGHT SIDEBAR CUSTOM CONFIGURATION (~35% WIDTH)
           ========================================================== */}
-          <div className="lg:col-span-3 bg-white border border-[#E8DCE1] rounded-[1rem] p-5 md:p-6 shadow-sm l
-          g:sticky lg:top-6">
+          <div className="lg:col-span-3 bg-white border border-[#E8DCE1] rounded-[1rem] p-5 md:p-6 shadow-sm lg:sticky lg:top-6">
             <h2 className="text-lg font-bold text-[#C2376A] mb-4 text-left">
               Book Your Custom Stitching
             </h2>
@@ -416,5 +446,7 @@ export default function ExactBridalBlouseProductPage() {
 
       </div>
     </main>
+    <Footer />
+    </>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import TopBanner from "@/components/TopBanner";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -166,6 +167,7 @@ const INITIAL_PRODUCTS: Product[] = [
 ];
 
 export default function ProductsPage() {
+  const router = useRouter();
   // Top category tabs with icons
   const topTabs = [
     {
@@ -799,7 +801,10 @@ export default function ProductsPage() {
 
                         {/* Card actions: Book Stitching + cart OR wishlist button */}
                         <div className="flex gap-2">
-                          <button className="flex-grow bg-primary hover:bg-[#A8104E] text-white py-2 rounded-xl font-sans font-bold text-[10px] md:text-xs tracking-wide transition-all shadow-sm shadow-primary/10 hover:shadow-md cursor-pointer text-center truncate">
+                          <button
+                            onClick={() => router.push(`/products/${product.id}`)}
+                            className="flex-grow bg-primary hover:bg-[#A8104E] text-white py-2 rounded-xl font-sans font-bold text-[10px] md:text-xs tracking-wide transition-all shadow-sm shadow-primary/10 hover:shadow-md cursor-pointer text-center truncate"
+                          >
                             Book Stitching
                           </button>
                           

@@ -22,7 +22,7 @@ export default function Header() {
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <a href="#" className="flex items-center">
+            <a href="/" className="flex items-center">
               <img
                 src="/images/logo.png"
                 alt="BlouseHub.in"
