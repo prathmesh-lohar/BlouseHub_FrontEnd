@@ -533,7 +533,7 @@ export default function SignupPage() {
 
               <p className="signin-row">
                 Already have an account?
-                <a href="#">Sign In</a>
+                <a href="/signin">Sign In</a>
               </p>
             </div>
 

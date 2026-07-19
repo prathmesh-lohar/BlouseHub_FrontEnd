@@ -3,6 +3,7 @@
 import Header from "@/components/Header";
 import TopBanner from "@/components/TopBanner";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 
 // small heart icon used in multiple places
 function HeartIcon({ className }: { className?: string }) {
@@ -103,7 +104,7 @@ const formIcons = {
 
 export default function SigninPage() {
   const [showPassword, setShowPassword] = useState(false);
-
+const router = useRouter();
   return (
     <div className="signin-outer">
       <style dangerouslySetInnerHTML={{ __html: `
@@ -482,7 +483,7 @@ export default function SigninPage() {
                   <label htmlFor="remember">Remember me</label>
                 </div>
 
-                <button type="submit" className="submit-btn">
+                <button onClick={()=> router.push("/")} type="submit" className="submit-btn">
                   <span>Sign In</span>
                   {formIcons.arrow}
                 </button>
@@ -513,7 +514,7 @@ export default function SigninPage() {
 
               <p className="signup-row">
                 Don&apos;t have an account?
-                <a href="#">Sign Up</a>
+                <a href="/signup">Sign Up</a>
               </p>
             </div>
 
