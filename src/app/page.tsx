@@ -8,10 +8,12 @@ import WhyChooseUs from "@/components/WhyChooseUs";
 import Testimonials from "@/components/Testimonials";
 import CTABanner from "@/components/CTABanner";
 import Footer from "@/components/Footer";
+import ComingSoonPopup from "@/components/ComingSoonPopup";
 
 export default function Home() {
   return (
     <>
+      <ComingSoonPopup />
       <TopBanner />
       <Header />
       <main>

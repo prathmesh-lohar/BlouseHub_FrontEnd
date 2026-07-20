@@ -115,7 +115,7 @@ export default function Header() {
                 aria-haspopup="true"
               >
                 <img
-                  src="/images/avatar.png"
+                  src="https://t4.ftcdn.net/jpg/09/61/69/75/360_F_961697523_EFd1m8P4tdcwB0TYvlQAagqKR1xHSuwk.jpg"
                   alt="Profile avatar"
                   className="w-8 h-8 rounded-full border border-[#E5D0DD] object-cover"
                 />
